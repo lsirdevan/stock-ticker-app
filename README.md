@@ -23,4 +23,8 @@ Once you've submitted your PR and notified our team, we will schedule a 45 - 60 
 
 Code reviews are an essential part of how our teams work, and this exercise attempts to come as close to how we operate as possible.
 
+## Alpha Vantage API
+The project requires you to consume the Alpha Vantage Stock API. You will need a free API key which can be found at [https://www.alphavantage.co/support/#api-key](https://www.alphavantage.co/support/#api-key). Full API documentation can be found at [https://www.alphavantage.co/documentation/](https://www.alphavantage.co/documentation/).
 
+## Questions or Concerns
+Please reach out to `greg@grifin.com` or your HR point of contact if you have any questions or concerns about this test drive.
