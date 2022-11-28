@@ -8,5 +8,12 @@ To help customers learn more about the various companies, we've decided to inves
 ![App Layout](layout.png)
 
 ## Rabbit Holes
+1. There is a lot of information that we could show to users, but at a minimum we will keep it to the subset of data shown in the screenshots above.
+2. We don't have a lot of time for creating Pixel-perfect designs, so developers are encouraged to use their best judgement with respect to design.
+3. The application itself isn't overly complicated; however, we need to have some degree of state management between screens.
+4. We don't require a heavy-duty datastore; however, we should consider being able to persist a user's favorites between app restarts.
+5.  
+
 ## No-gos
 1. This app is intended for informational purposes only and we will not be purchasing stocks or providing customers with specific advice on what stocks to purchase.
+2. We do not need to consider designs for both Android and iOS at the moment. Focusing on iOS users is sufficient for this MVP.
