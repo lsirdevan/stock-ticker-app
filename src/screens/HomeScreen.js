@@ -1,29 +1,70 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, SafeAreaView, Button, Text, TouchableOpacity } from 'react-native';
+import {useEffect, useState} from 'react';
+import {StyleSheet, SafeAreaView, Text, FlatList, View, TouchableOpacity} from 'react-native';
+import { SearchBar, Button } from 'react-native-elements';
 import { ALPHA_VANTAGE_API_KEY } from '@env';
+import axios from "axios";
 
 export default function HomeScreen({ navigation }) {
-    const [stock, onChangeText] = useState(null);
-    const [stockDetail, onUpdateStockDetail] = useState('');
+    const [searchText, updateSearchText] = useState('');
+    const [stockDetail, updateStockDetail] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const findStockName = async (stock, callback) => {
-        console.log(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${stock}&apikey=${ALPHA_VANTAGE_API_KEY}`);
-        try {
-            const response = await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${stock}&apikey=${ALPHA_VANTAGE_API_KEY}`);
-            const json = await response.json();
-            callback(JSON.stringify(json.bestMatches[0]));
-        } catch (error) {
-            console.error(error);
-        }
+    const findStockName = () => {
+        /* I wanted to make a request for every text change to show the user the results as they type, however
+         * there is a rate limit on alphavantage at 5 calls per minute or 500 calls a day so that won't work!
+         */
+        updateSearchText(text);
+        axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${text}&apikey=${ALPHA_VANTAGE_API_KEY}`)
+            .then(res => {
+                updateStockDetail(res.data.bestMatches);
+            });
     }
 
+    const onSearch = () => {
+        setLoading(true);
+        axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${searchText}&apikey=${ALPHA_VANTAGE_API_KEY}`)
+            .then(res => {
+                updateStockDetail(res.data.bestMatches);
+                setLoading(false);
+            });
+    }
+
+    const Item = ({ title }) => (
+        <View style={styles.item}>
+            <Text style={styles.title}>{title}</Text>
+        </View>
+    );
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Detail Stack', {
+            stock: item,
+            title: item['1. symbol'],
+        })}>
+            <Item title={item['1. symbol']} />
+        </TouchableOpacity>
+    );
+
     return (
-        <SafeAreaView style={styles.container}>
-            <TextInput style={styles.input} value={stock} onChangeText={onChangeText} />
-            <Button title="Look Up Stock" onPress={() => findStockName(stock, onUpdateStockDetail)} />
-            <TouchableOpacity onPress={() => navigation.navigate('Detail Stack')}>
-                <Text>{stockDetail}</Text>
-            </TouchableOpacity>
+        <SafeAreaView >
+            <SearchBar
+                placeholder="Search..."
+                onChangeText={(value) => updateSearchText(value)}
+                value={searchText}
+                showCancel
+                platform={'ios'}
+            />
+            <Button
+                title="Search"
+                onPress={onSearch}
+                type={'outline'}
+                raised
+                loading={loading}
+            />
+            <FlatList
+                data={stockDetail}
+                renderItem={renderItem}
+                keyExtractor={item => item['1. symbol']}
+            />
         </SafeAreaView>
     )
 }
@@ -35,11 +76,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    input: {
-        height: 40,
-        width: 200,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10
-    }
+    item: {
+        padding: 12,
+        marginVertical: 2,
+        marginHorizontal: 8,
+    },
+    title: {
+        fontSize: 16,
+    },
 });
