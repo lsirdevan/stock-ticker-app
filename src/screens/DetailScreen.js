@@ -3,12 +3,23 @@ import { Text, View, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from "axios";
 import { ALPHA_VANTAGE_API_KEY } from '@env';
+import { useSelector, useDispatch } from 'react-redux'
+import { addFavorite, removeFavorite} from "../redux/FavoriteSlice";
+import { indexOf } from 'lodash';
 
 export default function DetailScreen({ route, navigation }) {
     const { stock } = route.params;
 
+    const favorites = useSelector(state => state.FavoriteSlice.favorites);
+    const dispatch = useDispatch();
+
     const [companyData, setCompanyData] = useState({});
     const [favorited, setFavorited] = useState(false);
+
+    const favoritePress = (type) => {
+        dispatch(type == 'add' ? addFavorite(stock) : removeFavorite(stock));
+        setFavorited(!favorited);
+    }
 
     useEffect(() => {
         axios.get(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stock['1. symbol']}&apikey=${ALPHA_VANTAGE_API_KEY}`)
@@ -21,14 +32,14 @@ export default function DetailScreen({ route, navigation }) {
         navigation.setOptions({
             headerRight: () => (
                 <View style={{paddingRight: 12}}>
-                    {favorited ?
-                        <Icon onPress={() => console.log('test')} name="heart" size={28} color={'#007AFF'}/>
+                    {favorites?.find(e => e['1. symbol'] === stock['1. symbol']) ?
+                        <Icon onPress={() => favoritePress('remove')} name="heart" size={28} color={'#007AFF'}/>
                     :
-                        <Icon onPress={() => console.log('test')} name="heart-o" size={28} color={'#007AFF'}/>}
+                        <Icon onPress={() => favoritePress('add')} name="heart-o" size={28} color={'#007AFF'}/>}
                 </View>
             ),
         });
-    }, [navigation]);
+    }, [navigation, favorited]);
 
     return (
         <>
