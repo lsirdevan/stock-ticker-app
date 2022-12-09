@@ -4,6 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import DetailScreen from "../screens/DetailScreen";
 import HomeScreen from "../screens/HomeScreen";
+import SearchScreen from "../screens/SearchScreen";
+import FavoriteScreen from "../screens/FavoriteScreen";
 
 const Stack = createStackNavigator();
 
@@ -15,9 +17,17 @@ const Navigation = () => (
     <NavigationContainer>
         <Stack.Navigator>
             <Stack.Screen
-                name={"Search"}
+                name={"Home"}
                 component={HomeScreen}
                 options={NAVIGATION_OPTIONS}
+            />
+            <Stack.Screen
+                name={"Favorites"}
+                component={FavoriteScreen}
+            />
+            <Stack.Screen
+                name={"Search"}
+                component={SearchScreen}
             />
             <Stack.Screen
                 name={"Detail Stack"}

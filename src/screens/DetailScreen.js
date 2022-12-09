@@ -5,7 +5,6 @@ import axios from "axios";
 import { ALPHA_VANTAGE_API_KEY } from '@env';
 import { useSelector, useDispatch } from 'react-redux'
 import { addFavorite, removeFavorite} from "../redux/FavoriteSlice";
-import { indexOf } from 'lodash';
 
 export default function DetailScreen({ route, navigation }) {
     const { stock } = route.params;
@@ -19,6 +18,8 @@ export default function DetailScreen({ route, navigation }) {
     const favoritePress = (type) => {
         dispatch(type == 'add' ? addFavorite(stock) : removeFavorite(stock));
         setFavorited(!favorited);
+        // Debated using goBack after the user clicks Favorite but decided against it as forcing that transition seems like bad UX.
+        //navigation.goBack();
     }
 
     useEffect(() => {
