@@ -14,6 +14,7 @@ export default function DetailScreen({ route, navigation }) {
 
     const [companyData, setCompanyData] = useState({});
     const [favorited, setFavorited] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
     const favoritePress = (type) => {
         dispatch(type == 'add' ? addFavorite(stock) : removeFavorite(stock));
@@ -26,6 +27,7 @@ export default function DetailScreen({ route, navigation }) {
         axios.get(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stock['1. symbol']}&apikey=${ALPHA_VANTAGE_API_KEY}`)
             .then(res => {
                 setCompanyData(res.data);
+                setLoaded(true);
             });
     }, []);
 
@@ -44,7 +46,7 @@ export default function DetailScreen({ route, navigation }) {
 
     return (
         <>
-            {companyData ? (
+            {Object.keys(companyData).length !== 0 ? (
                 <View>
                     <Text>{companyData.Description}</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -73,8 +75,15 @@ export default function DetailScreen({ route, navigation }) {
                     </View>
                 </View>
             ): (
-                <View>
-                    <Text>Loading...</Text>
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    {loaded ? (
+                        <Text>unable to find data for '{stock['1. symbol']}'</Text>
+                    ) : (
+                        <Text>Loading...</Text>
+                    )}
                 </View>
             )}
         </>
