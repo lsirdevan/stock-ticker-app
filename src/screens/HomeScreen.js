@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, SafeAreaView, Button, Text } from 'react-native';
+import { StyleSheet, TextInput, SafeAreaView, Button, Text, TouchableOpacity } from 'react-native';
 import { ALPHA_VANTAGE_API_KEY } from '@env';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
     const [stock, onChangeText] = useState(null);
     const [stockDetail, onUpdateStockDetail] = useState('');
 
@@ -21,7 +21,9 @@ export default function HomeScreen() {
         <SafeAreaView style={styles.container}>
             <TextInput style={styles.input} value={stock} onChangeText={onChangeText} />
             <Button title="Look Up Stock" onPress={() => findStockName(stock, onUpdateStockDetail)} />
-            <Text>{stockDetail}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Detail Stack')}>
+                <Text>{stockDetail}</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
