@@ -3,6 +3,7 @@ import {StyleSheet, SafeAreaView, Text, FlatList, View, TouchableOpacity} from '
 import { SearchBar, Button } from 'react-native-elements';
 import { ALPHA_VANTAGE_API_KEY } from '@env';
 import axios from "axios";
+import FlatListItem from "../components/FlatListItem";
 
 export default function SearchScreen({ route, navigation }) {
     const [searchText, updateSearchText] = useState('');
@@ -29,21 +30,6 @@ export default function SearchScreen({ route, navigation }) {
             });
     }
 
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-        </View>
-    );
-
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Detail Stack', {
-            stock: item,
-            title: item['1. symbol'],
-        })}>
-            <Item title={item['1. symbol']} />
-        </TouchableOpacity>
-    );
-
     return (
         <SafeAreaView >
             <SearchBar
@@ -62,7 +48,15 @@ export default function SearchScreen({ route, navigation }) {
             />
             <FlatList
                 data={stockDetail}
-                renderItem={renderItem}
+                renderItem={({ item }) => (
+                    <FlatListItem
+                        navigate={() => navigation.navigate('Detail Stack', {
+                            stock: item,
+                            title: item['1. symbol'],
+                        })}
+                        title={item['1. symbol']}
+                    />
+                )}
                 keyExtractor={item => item['1. symbol']}
             />
         </SafeAreaView>

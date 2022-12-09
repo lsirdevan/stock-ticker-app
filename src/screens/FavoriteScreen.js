@@ -1,30 +1,24 @@
 import {Text, View, Button, FlatList, TouchableOpacity, StyleSheet, SafeAreaView} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
+import FlatListItem from "../components/FlatListItem";
 
 export default function FavoriteScreen({ navigation }) {
     const favorites = useSelector(state => state.FavoriteSlice.favorites);
-
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-        </View>
-    );
-
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Detail Stack', {
-            stock: item,
-            title: item['1. symbol'],
-        })}>
-            <Item title={item['1. symbol']} />
-        </TouchableOpacity>
-    );
 
     return (
         <SafeAreaView >
             {favorites.length !== 0 ? (
                 <FlatList
                     data={favorites}
-                    renderItem={renderItem}
+                    renderItem={({ item }) => (
+                        <FlatListItem
+                            navigate={() => navigation.navigate('Detail Stack', {
+                                stock: item,
+                                title: item['1. symbol'],
+                            })}
+                            title={item['1. symbol']}
+                        />
+                    )}
                     keyExtractor={item => item['1. symbol']}
                 />
             ) : (
