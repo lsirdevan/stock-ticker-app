@@ -9,7 +9,7 @@ import { addFavorite, removeFavorite} from "../redux/FavoriteSlice";
 export default function DetailScreen({ route, navigation }) {
     const { stock } = route.params;
 
-    const favorites = useSelector(state => state.FavoriteSlice.favorites);
+    const favorites = useSelector(state => state.favorites.favorites);
     const dispatch = useDispatch();
 
     const [companyData, setCompanyData] = useState({});

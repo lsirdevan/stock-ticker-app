@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import FlatListItem from "../components/FlatListItem";
 
 export default function FavoriteScreen({ navigation }) {
-    const favorites = useSelector(state => state.FavoriteSlice.favorites);
+    const favorites = useSelector(state => state.favorites.favorites);
 
     return (
         <SafeAreaView >

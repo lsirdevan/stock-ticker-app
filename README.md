@@ -9,7 +9,7 @@ More features to come! See list:
 
 * Save Stocks to "Favorites"
 * Create global redux state using redux persist to persist data across app reloads/refreshes
-* Impliment typescript in a few components to try it out
+* Implement typescript in a few components to try it out
 * Redo store to use [RTK](https://redux-toolkit.js.org/introduction/getting-started)
 * Add tailwind css lib
 * Use reanimated to make a cool animation
